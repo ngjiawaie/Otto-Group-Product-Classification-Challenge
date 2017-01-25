@@ -12,9 +12,13 @@ train <- sample(1:nrow(data), trainingSize)
 test <- data[-train,]
 
 #Naive Bayes
-classifier <- naiveBayes(target ~.-id, data, subset=train)
+classifier <- naiveBayes(target ~.-id, data,laplace=3, subset=train)
 classifier
 
 #Confusion matrix
-prediction <- predict(classifier,test[,-(ncol(test))])
-table(prediction, test$target)
+prediction.naivebayes <- predict(classifier,test[,-(ncol(test))])
+(conf <- table(prediction.naivebayes, test$target))
+
+library(caret) 
+f.conf <- confusionMatrix(conf)
+f.conf
