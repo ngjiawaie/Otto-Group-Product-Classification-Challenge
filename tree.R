@@ -1,0 +1,17 @@
+library(ISLR)
+library(tree)
+library(rpart)
+set.seed(1)
+
+data <- read.csv("train.csv")
+summary(data)
+fit <- rpart(target ~ . -id,data = data,method = "class")
+summary(fit)
+plot(fit,uniform = TRUE)
+text(fit, pretty = 0)
+printcp(fit)
+
+pfit<- prune(fit, cp = fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"])
+printcp(pfit)
+plot(pfit)
+text(pfit,pretty=0)
