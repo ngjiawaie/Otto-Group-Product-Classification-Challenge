@@ -1,23 +1,24 @@
 #install.packages("e1071")
 set.seed(1)
 library(e1071)
+library(ggplot2)
 
 data <- read.csv("train.csv")
-#Data needs to be in factor before dumping in
+data <- data[,-1]
 data <- as.data.frame(lapply(data, function(x) as.factor(x)))
+ggplot(data, aes(x = factor(target))) + geom_bar(stat = "count")
 
-#Sampling for training and test sets 4:1
-trainingSize <- floor(nrow(data)*0.8)
-train <- sample(1:nrow(data), trainingSize)
-test <- data[-train,]
+test <- data[sample(1:nrow(data), floor(nrow(data)*0.3)),]
+train <- downSample(x = data[, -ncol(data)],y = data$target)
 
 #Naive Bayes
-classifier <- naiveBayes(target ~.-id, data,laplace=3, subset=train)
+classifier <- naiveBayes(Class ~., train,laplace=1)
 classifier
 
 #Confusion matrix
 prediction.naivebayes <- predict(classifier,test[,-(ncol(test))])
-(conf <- table(prediction.naivebayes, test$target))
+(conf <- table(pred=prediction.naivebayes, true=test$target))
+mean(prediction.naivebayes==test$target)
 
 library(caret) 
 f.conf <- confusionMatrix(conf)
