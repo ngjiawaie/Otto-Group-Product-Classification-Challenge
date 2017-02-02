@@ -5,6 +5,7 @@ library(tree)
 library(randomForest)
 library(ggplot2)
 library(dplyr)
+library(caret)
 set.seed(5)
 
 # import data
@@ -34,8 +35,8 @@ table(train_d$Class)
 x <- train_d
 x$Class <- NULL
 tunemtry <- tuneRF(x,train_d$Class, stepFactor=1.5, plot=TRUE,improve=0.01)
-#tunemtry shows the best mtry is 19
-tree_model <- randomForest(Class ~ ., train_d, importance=TRUE, mtry=19) 
+#tunemtry shows the best mtry is 9
+tree_model <- randomForest(Class ~ ., train_d, importance=TRUE, mtry=9) 
 print(tree_model)
 plot(tree_model, main="Tree")
 
