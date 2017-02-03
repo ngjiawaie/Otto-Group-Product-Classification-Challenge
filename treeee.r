@@ -51,3 +51,4 @@ tree_predict <- predict(tree_model, test[,-94], type = "prob")[,2]
 
 multi <- multiclass.roc(test$target, tree_predict)
 auc(multi)
+
