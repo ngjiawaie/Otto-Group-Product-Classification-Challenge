@@ -1,28 +1,21 @@
-#setwd("C:/Users/Wayne/Desktop/Subject/R/Otto-Group-Product-Classification-Challenge")
-#train <- read.csv(file = "train.csv", header = TRUE)
-#test <- read.csv(file = "test.csv", header = TRUE)
-#
-#maxs <- apply(train[,2:94],2,max)
-#mins <- apply(train[,2:94],2,min)
-#
-#scaled.data <- as.data.frame(scale(train[,2:94],center = mins, scale = maxs - mins))
-#feats <- names(scaled.data)
-#f <- paste(feats,collapse=' + ')
-#f <- paste('target ~ ',f)
-##Class_1 + Class_2 + Class_3 + Class_4 + Class_5 + Class_6 + Class_7 + Class_8 + Class_9 ~ 
-#f <- as.formula(f)
-#f
-#
-#library(neuralnet)
-#library(nnet)
-#nn <- nnet(target ~ ., train[,-1], size = 3, rang = 0.1, decay = 5e-4, maxit = 500)
-#
-#library(NeuralNetTools)
-#
-#plotnet(nn, alpha=0.6)
-
-train <- read.csv(file = "train.csv", header = TRUE, stringsAsFactors = FALSE)
-test <- read.csv(file = "test.csv", header = TRUE, stringsAsFactors = FALSE)
-library(MASS)
-library(neuralnet)
 library(nnet)
+library(pROC)
+
+data <- read.csv(file = "train.csv", header = TRUE)
+data <- data[,-1]
+
+ind <- sample(1:nrow(data), floor(nrow(data)*0.3))
+test <- data[ind,]
+train <- data[-ind,]
+
+fit<-nnet(target ~ ., train[,-1], size = 3, rang = 0.1, decay = 5e-4, maxit = 500) 
+
+#predict on the test data
+predicted<- predict(fit,test[1:93],type="class")
+table(test$target,predicted)
+
+
+#ROC
+predicted<- predict(fit,test[,-94],type="raw")
+multi <- multiclass.roc(test$target, predicted[,1])
+auc(multi)
