@@ -56,7 +56,9 @@ We can say that for our dataset, random forest performs better.
 
 Classifiers behave differently because their underlying theory is different.
 For instance, neural networks are bad with sparse data and such.
+
 Naive Bayes on the other hand, assumes member variables to be independent of each other.
 In this case for products, one feature clearly will have correlation with other feature(s).
 Hence, the low AUC (~70%) of Naive Bayes is justified.
+
 Random Forest always outperform normal decision tree because of its ensemble approach. The drawback being it is computationally expensive.
