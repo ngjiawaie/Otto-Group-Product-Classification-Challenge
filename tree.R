@@ -43,14 +43,14 @@ plot(tree_model, main="Tree")
 tree_predict <- predict(tree_model, test_d[,-94], type="class")
 mean(tree_predict != test_target) #around 0.17
 
+#view confusion Matrix
+confusionMatrix(tree_predict,test_target)
+
 #ROC
 library(pROC)
 tree_predict <- predict(tree_model, test_d, type = "prob")[,2]
 multi <- multiclass.roc(test_d$target, tree_predict)
 auc(multi)
-
-#view confusion Matrix
-confusionMatrix(tree_predict,test_target)
 
 #importance
 imp <- importance(tree_model, type=1)
