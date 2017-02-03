@@ -61,4 +61,4 @@ Naive Bayes on the other hand, assumes member variables to be independent of eac
 In this case for products, one feature clearly will have correlation with other feature(s).
 Hence, the low AUC (~70%) of Naive Bayes is justified.
 
-Random Forest always outperform normal decision tree because of its ensemble approach. The drawback being it is computationally expensive.
+Random Forest always outperform normal decision tree, particularly in larger datasets because of its ensemble approach. The drawback being it is computationally expensive.
