@@ -42,7 +42,7 @@ Based on random forest (tree), we are able to sort out the top 10 feature based 
 Our code is divided into 3 R files
 * ANN.R - Artificial neural network (Library used : nnet)
 * naiveBayes.R - Naive Bayes model (Library used : klaR)
-* tree.R - Decision tree (Library ysed: randomForest, tree, ISLR)
+* tree.R - Decision tree (Library used: randomForest, tree, ISLR)
 
 The confusion matrix is plotted in each of the files, for comparison between these algorithms, we will take a look at the area under the curve.
 
@@ -56,3 +56,7 @@ We can say that for our dataset, random forest performs better.
 
 Classifiers behave differently because their underlying theory is different.
 For instance, neural networks are bad with sparse data and such.
+Naive Bayes on the other hand, assumes member variables to be independent of each other.
+In this case for products, one feature clearly will have correlation with other feature(s).
+Hence, the low AUC (~70%) of Naive Bayes is justified.
+Random Forest always outperform normal decision tree because of its ensemble approach. The drawback being it is computationally expensive.
