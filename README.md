@@ -52,5 +52,7 @@ The confusion matrix is plotted in each of the files, for comparison between the
 | Naive Bayes   | 0.72                                     | 0.6552      |
 | Tree          | 0.82                                     | 0.8348      |
 
+We can say that for our dataset, random forest performs better.
+
 Classifiers behave differently because their underlying theory is different.
 For instance, neural networks are bad with sparse data and such.
