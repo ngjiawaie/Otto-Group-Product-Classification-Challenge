@@ -43,6 +43,12 @@ plot(tree_model, main="Tree")
 tree_predict <- predict(tree_model, test_d[,-94], type="class")
 mean(tree_predict != test_target) #around 0.17
 
+#ROC
+library(pROC)
+tree_predict <- predict(tree_model, test_d, type = "prob")[,2]
+multi <- multiclass.roc(test_d$target, tree_predict)
+auc(multi)
+
 #view confusion Matrix
 confusionMatrix(tree_predict,test_target)
 
@@ -70,5 +76,3 @@ p_mini <- ggplot(imp.top10, aes(x=reorder(Feature, Importance), y=Importance)) +
   ggtitle("Importance of Features \n") +
   theme(plot.title=element_text(size=20))
 p_mini
-
-
