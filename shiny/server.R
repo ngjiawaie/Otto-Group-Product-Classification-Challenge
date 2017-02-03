@@ -3,19 +3,37 @@ library(tree)
 library(randomForest)
 library(ggplot2)
 library(dplyr)
+library(caret)
+
+library(PerformanceAnalytics)
+library(e1071)
+library(klaR)
 set.seed(5)
 
 # import data
 train_data <- read.csv("train.csv")
-test_data <- read.csv("test.csv")
 
 train_data <- train_data[,-1]
 
-test <- sample(1:nrow(train_data),nrow(train_data)/2)
-test_d <- train_data[test,]
+ind <- sample(1:nrow(train_data), floor(nrow(train_data)*0.3))
+test_d <- train_data[ind,]
+train_d <- train_data[-ind,]
 test_target <- test_d$target
+
 train_d <- downSample(x = train_data[, -ncol(train_data)],y = train_data$target)
 tree_model <- randomForest(Class ~ ., train_d, importance=TRUE, mtry=19)
+
+#naive bayes data preperation
+n_data <- as.data.frame(lapply(train_data, function(x) as.factor(x)))
+
+ind <- sample(1:nrow(n_data), floor(nrow(n_data)*0.3))
+test <- n_data[ind,]
+train <- n_data[-ind,]
+
+#Naive Bayes
+classifier <- NaiveBayes(target ~., train,laplace=1)
+prediction.naivebayes <- predict(classifier,test[,-(ncol(test))])
+conf <- table(pred=prediction.naivebayes$class, true=test$target)
 #------------------------------------------------------------------End of Data Preparation
 
 
@@ -42,6 +60,13 @@ shinyServer(function(input, output) {
           theme(plot.title=element_text(size=20))
         p_mini
       }
+    }
+    else if(input$TypeOfGraph == "Naive Bayes"){
+      textplot(      
+        capture.output(     
+          confusionMatrix(conf)  
+        ),cex=0.65      
+      )  
     }
     
   })
