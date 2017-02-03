@@ -39,3 +39,10 @@ for (type.id in 1:9) {
 
 lines(x=c(0,1), c(0,1))
 mean(aucs)
+#----------------------NEW---------------------#
+library(pROC)
+nbmodel = NaiveBayes(target ~ ., data=train)
+nbprediction = predict(nbmodel, test[,-(ncol(test))], type='prob')
+
+multi <- multiclass.roc(test$target, as.numeric(nbprediction$posterior[,1]))
+auc(multi)

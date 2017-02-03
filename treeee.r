@@ -29,7 +29,8 @@ for (type.id in 1:9) {
   tree_model <- randomForest(type ~ ., data = train, importance=TRUE, mtry=9) 
   tree_predict <- predict(tree_model, test, type = "prob")[,2]
   
-  pred = prediction(tree_predict, (test$target == lvls[type.id]))
+  actual.class = test$target == lvls[type.id]
+  pred = prediction(tree_predict, actual.class)
   nbperf = performance(pred, "tpr", "fpr")
   
   roc.x = unlist(nbperf@x.values)
@@ -42,3 +43,11 @@ for (type.id in 1:9) {
 
 lines(x=c(0,1), c(0,1))
 mean(aucs)
+#----------------------NEW---------------------#
+install.packages("pROC")
+library(pROC)
+tree_model <- randomForest(target ~ ., data = train, importance=TRUE, mtry=9) 
+tree_predict <- predict(tree_model, test[,-94], type = "prob")[,2]
+
+multi <- multiclass.roc(test$target, tree_predict)
+auc(multi)
