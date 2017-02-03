@@ -19,7 +19,7 @@ ui <- fluidPage(
                     selected = "Random Forest")
       ),br(),
       conditionalPanel(
-        condition = "input.RF_type == 'Importance of Features'",
+        condition = "input.RF_type == 'Importance of Features' && input.TypeOfGraph == 'Random Forest'",
         sliderInput(inputId="RF_filter", 
                     label="Select the number of features to be displayed(ordered by importance):", 
                     min=1, max=93, value=93, step=1)

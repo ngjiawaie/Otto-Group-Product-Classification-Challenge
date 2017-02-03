@@ -34,6 +34,18 @@ train <- n_data[-ind,]
 classifier <- NaiveBayes(target ~., train,laplace=1)
 prediction.naivebayes <- predict(classifier,test[,-(ncol(test))])
 conf <- table(pred=prediction.naivebayes$class, true=test$target)
+
+#ann 
+a_data <- train_data
+ind_a <- sample(1:nrow(a_data), floor(nrow(a_data)*0.3))
+test_a <- a_data[ind_a,]
+train_a <- a_data[-ind_a,]
+
+fit_a<-nnet(target ~ ., train_a[,-1], size = 3, rang = 0.1, decay = 5e-4, maxit = 500) 
+
+#predict on the test data
+predicted_a<- predict(fit,test_a[1:93],type="class")
+conf_a <- table(pred=predicted_a, true=test$target)
 #------------------------------------------------------------------End of Data Preparation
 
 
@@ -67,6 +79,13 @@ shinyServer(function(input, output) {
           confusionMatrix(conf)  
         ),cex=0.65      
       )  
+    }
+    else if(input$TypeOfGraph == "ANN"){
+      textplot(      
+        capture.output(     
+          confusionMatrix(conf_a)  
+        ),cex=0.65      
+      ) 
     }
     
   })
