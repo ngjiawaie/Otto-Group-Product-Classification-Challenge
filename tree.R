@@ -40,7 +40,7 @@ print(tree_model)
 plot(tree_model, main="Tree")
 
 #test the model by using predict
-tree_predict <- predict(tree_model, test_d, type="class")
+tree_predict <- predict(tree_model, test_d[,-94], type="class")
 mean(tree_predict != test_target) #around 0.17
 
 #view confusion Matrix
