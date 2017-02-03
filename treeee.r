@@ -3,6 +3,7 @@
 library(ROCR)
 library(tree)
 library(randomForest)
+library(caret)
 
 data <- read.csv("train.csv")
 data <- data[,-1]
@@ -26,7 +27,7 @@ for (type.id in 1:9) {
   type = as.factor(train$target == lvls[type.id])
   
   tree_model <- randomForest(type ~ ., data = train, importance=TRUE, mtry=9) 
-  tree_predict <- predict(tree_model, type="prob", test[,-94])[,2]
+  tree_predict <- predict(tree_model, test, type = "prob")[,2]
   
   pred = prediction(tree_predict, (test$target == lvls[type.id]))
   nbperf = performance(pred, "tpr", "fpr")
