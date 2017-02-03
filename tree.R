@@ -10,13 +10,10 @@ set.seed(5)
 
 # import data
 train_data <- read.csv("train.csv")
-test_data <- read.csv("test.csv")
 
 #check data
 dim(train_data)
-dim(test_data)
 head(train_data)
-head(test_data)
 str(train_data)
 #test_data no "target", hence train and test data need to be created from train_data
 
@@ -24,8 +21,10 @@ str(train_data)
 train_data <- train_data[,-1]
 
 #create train and test data from train_data
-test <- sample(1:nrow(train_data),nrow(train_data)/2)
-test_d <- train_data[test,]
+ind <- sample(1:nrow(train_data), floor(nrow(train_data)*0.3))
+test_d <- train_data[ind,]
+train_d <- train_data[-ind,]
+
 test_target <- test_d$target
 #downsampling is use to make sure balanced "target" class is obtained
 train_d <- downSample(x = train_data[, -ncol(train_data)],y = train_data$target)
@@ -35,8 +34,8 @@ table(train_d$Class)
 x <- train_d
 x$Class <- NULL
 tunemtry <- tuneRF(x,train_d$Class, stepFactor=1.5, plot=TRUE,improve=0.01)
-#tunemtry shows the best mtry is 9
-tree_model <- randomForest(Class ~ ., train_d, importance=TRUE, mtry=9) 
+#tunemtry shows the best mtry is 19
+tree_model <- randomForest(Class ~ ., train_d, importance=TRUE, mtry=19) 
 print(tree_model)
 plot(tree_model, main="Tree")
 

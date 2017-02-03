@@ -11,7 +11,7 @@ ind <- sample(1:nrow(data), floor(nrow(data)*0.3))
 test <- data[ind,]
 train <- data[-ind,]
 
-train <- downSample(x = train[, -ncol(train)],y = train$target)
+train <- downSample(x = data[, -ncol(train)],y = data$target)
 train$target <- train$Class
 train$Class <- NULL
 lvls = levels(train$target)
@@ -26,7 +26,7 @@ legend(0.7, 0.8, legend=lvls, col= 2:10, lwd=2, cex=0.8)
 for (type.id in 1:9) {
   type = as.factor(train$target == lvls[type.id])
   
-  tree_model <- randomForest(type ~ ., data = train, importance=TRUE, mtry=9) 
+  tree_model <- randomForest(type ~ ., data = train, importance=TRUE, mtry=19) 
   tree_predict <- predict(tree_model, test, type = "prob")[,2]
   
   actual.class = test$target == lvls[type.id]
